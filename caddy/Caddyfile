@@ -23,26 +23,27 @@ oci.fariszr.com {
     }
 
     route @api_request {
-        redir https://quay.io{uri} 307
+		redir https://quay.io{uri} 307
 
-        # These responses are all constant redirects, except if we actually change to a
-        # completely different registry. Cache them for 1 day, so that clients & downstream
-        # proxies can avoid fully duplicating basic requests here, so far as possible.
-        # cache {
-            # ttl {$CACHE_TIMEOUT:86400}s
-            # default_cache_control max-age={$CACHE_TIMEOUT:86400}, must-revalidate
-            # key {
-                # hide
-            # }
-        # }
-    # }
-    header Cache-Control "max-age=86400, must-revalidate"
+		# These responses are all constant redirects, except if we actually change to a
+		# completely different registry. Cache them for 1 day, so that clients & downstream
+		# proxies can avoid fully duplicating basic requests here, so far as possible.
+		# cache {
+			# ttl {$CACHE_TIMEOUT:86400}s
+			# default_cache_control max-age={$CACHE_TIMEOUT:86400}, must-revalidate
+			# key {
+				# hide
+			# }
+		# }
+	# }
+		header Cache-Control "max-age=86400, must-revalidate"
 
-    route * {
-        respond 403 {
-            body `{ "errors": [{"message": "Only API requests for {path_matcher} images are supported"}] }`
-        }
-    }
+		route * {
+			respond 403 {
+				body `{ "errors": [{"message": "Only API requests for {path_matcher} images are supported"}] }`
+			}
+		}
+	}
 }
 
 www.fariszr.com {
