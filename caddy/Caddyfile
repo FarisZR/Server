@@ -1,5 +1,4 @@
 {
-	email {env.EMAIL}
 	admin off
 	acme_dns desec {
 		token {$DESEC_TOKEN}
