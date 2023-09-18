@@ -1,0 +1,44 @@
+name: deploy-caddy
+
+on:
+  push:
+    paths:
+      - '.github/workflows/caddy.yml'
+      - 'caddy/**'
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Tailscale
+        uses: tailscale/github-action@4e4c49acaa9818630ce0bd7a564372c17e33fb4d
+        with:
+          oauth-client-id: ${{ secrets.TAILSCALE_CLIENT_ID }}
+          oauth-secret: ${{ secrets.TAILSCALE_SECRET }}
+          tags: tag:ci
+          hostname: Github-actions
+          version: ${{ vars.TAILSCALE_VERSION }}
+
+      # allows for quicker local debugging
+      - name: Add secrets to docker-compose.yml
+        env:
+          DESEC_TOKEN: ${{ secrets.caddy_desec_token }}
+        run: |
+          sed -i "s|(DESEC_TOKEN)|$DESEC_TOKEN|g" $GITHUB_WORKSPACE/caddy/docker-compose.yml
+
+      - name: Start Deployment
+        uses: FarisZR/docker-compose-gitops-action@v1.0.1
+        with:
+          remote_docker_host: ${{ secrets.server_address }}
+          tailscale_ssh: true # no need for manual private and public keys
+          compose_file_path: caddy/docker-compose.yml
+          args: -p caddy up -d --remove-orphans && docker compose restart -p caddy
+          upload_directory: true
+          docker_compose_directory: caddy

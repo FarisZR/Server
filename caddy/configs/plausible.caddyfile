@@ -1,0 +1,8 @@
+pa.fariszr.com {
+        rewrite /js/pls.js /js/plausible.js
+        rewrite /js/pls2.js /js/plausible.hash.js
+        rewrite /js/pls3.js /js/plausible.outbound-links.js
+        rewrite /js/pls4.js /js/plausible.hash.outbound-links.js
+        reverse_proxy plausible:8000
+        encode zstd gzip
+}

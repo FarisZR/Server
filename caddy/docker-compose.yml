@@ -1,0 +1,36 @@
+version: "3.7"
+
+networks:
+  web:
+    external: true
+
+services:
+  caddy:
+    image: oci.fariszr.com/fariszr/caddy-dns:desec-alpine@sha256:f8858b02e20eaf364c3fa02f81cbb5001cdef1f52cdf153baafefec2c3347c1d
+    container_name: caddy
+    restart: always
+    configs:
+      - source: Caddyfile
+        target: /etc/caddy/Caddyfile
+    environment:
+      - DESEC_TOKEN=(DESEC_TOKEN)
+    ports:
+      - "80:80"
+      - "443:443"
+      - "443:443/udp"
+      # - "8448:8448"
+    volumes:
+      - /home/ubuntu/caddy/configs:/etc/caddy/configs:ro
+      - ~/web:/web:ro
+      - data:/data
+      - config:/config
+    networks:
+      - web
+
+configs:
+  Caddyfile:
+    file: /home/ubuntu/caddy/Caddyfile
+
+volumes:
+  data:
+  config:
