@@ -39,6 +39,4 @@ jobs:
           remote_docker_host: ${{ secrets.server_address }}
           tailscale_ssh: true # no need for manual private and public keys
           compose_file_path: caddy/docker-compose.yml
-          args: -p caddy up -d --remove-orphans && docker compose restart -p caddy
-          upload_directory: true
-          docker_compose_directory: caddy
+          args: -p caddy up -d --remove-orphans
