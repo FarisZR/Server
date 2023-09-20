@@ -44,6 +44,7 @@ jobs:
           sed -i "s|(plausible_google_client_secret)|$PLAUSIBLE_GOOGLE_CLIENT_SECRET|g" $GITHUB_WORKSPACE/plausible/docker-compose.yml
           sed -i "s|(plausible_secret_key_base)|$PLAUSIBLE_SECRET_KEY_BASE|g" $GITHUB_WORKSPACE/plausible/docker-compose.yml
           sed -i "s|(plausible_postgres_password)|$PLAUSIBLE_POSTGRES_PASSWORD|g" $GITHUB_WORKSPACE/plausible/docker-compose.yml
+          sed -i "s|(plausible_from_address)|$PLAUSIBLE_FROM_ADDRESS|g" $GITHUB_WORKSPACE/plausible/docker-compose.yml
           sed -i "s|(smtp_password)|$SMTP_PASSWORD|g" $GITHUB_WORKSPACE/plausible/docker-compose.yml
           sed -i "s|(smtp_username)|$SMTP_USERNAME|g" $GITHUB_WORKSPACE/plausible/docker-compose.yml
           sed -i "s|(smtp_endpoint)|$SMTP_ENDPOINT|g" $GITHUB_WORKSPACE/plausible/docker-compose.yml
