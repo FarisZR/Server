@@ -21,7 +21,7 @@ services:
       # - "8448:8448"
     volumes:
       - /home/ubuntu/caddy/configs:/etc/caddy/configs:ro
-      - ~/web:/web:ro
+      - /home/ubuntu/web:/web:ro
       - data:/data
       - config:/config
     networks:
