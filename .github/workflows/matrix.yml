@@ -1,0 +1,98 @@
+name: deploy-matrix
+
+on:
+  push:
+    paths:
+      - '.github/workflows/matrix.yml'
+      - 'matrix/**'
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: Matrix
+      url: https://matrix.fariszr.com
+    steps:
+      - name: checkout
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Tailscale
+        uses: tailscale/github-action@65cdd9a05d7ebe4ef4e8c70141f5d84e1cd4cab4
+        with:
+          oauth-client-id: ${{ secrets.TAILSCALE_CLIENT_ID }}
+          oauth-secret: ${{ secrets.TAILSCALE_SECRET }}
+          tags: tag:deploy-ci
+          hostname: Github-actions
+          version: ${{ vars.TAILSCALE_VERSION }}
+
+      - name: Add secrets to homeserver.yml
+        env:
+          MATRIX_TURN_SHARED_SECRET: ${{ secrets.matrix_turn_shared_secret }}
+          MATRIX_REGISTRATION_SHARED_SECRET: ${{ secrets.matrix_registration_shared_secret }}
+          MATRIX_MACAROON_SECRET_KEY: ${{ secrets.matrix_macaroon_secret_key }}
+          MATRIX_FORM_SECRET: ${{ secrets.matrix_form_secret }}
+          MATRIX_POSTGRES_PASSWORD: ${{ secrets.matrix_postgres_password }}
+          SMTP_PASSWORD: ${{ secrets.smtp_password }}
+          SMTP_USERNAME: ${{ secrets.smtp_username }}
+          SMTP_ENDPOINT: ${{ secrets.smtp_endpoint }}
+          MATRIX_SMTP_FROM_ADDRESS: ${{ secrets.matrix_smtp_from_address }}
+        run: |
+          sed -i "s|(matrix_turn_shared_secret)|$MATRIX_TURN_SHARED_SECRET|g" $GITHUB_WORKSPACE/matrix/homeserver.yaml
+          sed -i "s|(matrix_registration_shared_secret)|$MATRIX_REGISTRATION_SHARED_SECRET|g" $GITHUB_WORKSPACE/matrix/homeserver.yaml
+          sed -i "s|(matrix_macaroon_secret_key)|$MATRIX_MACAROON_SECRET_KEY|g" $GITHUB_WORKSPACE/matrix/homeserver.yaml
+          sed -i "s|(matrix_form_secret)|$MATRIX_FORM_SECRET|g" $GITHUB_WORKSPACE/matrix/homeserver.yaml
+          sed -i "s|(matrix_postgres_password)|$MATRIX_POSTGRES_PASSWORD|g" $GITHUB_WORKSPACE/matrix/homeserver.yaml
+          sed -i "s|(smtp_password)|$SMTP_PASSWORD|g" $GITHUB_WORKSPACE/matrix/homeserver.yaml
+          sed -i "s|(smtp_username)|$SMTP_USERNAME|g" $GITHUB_WORKSPACE/matrix/homeserver.yaml
+          sed -i "s|(smtp_endpoint)|$SMTP_ENDPOINT|g" $GITHUB_WORKSPACE/matrix/homeserver.yaml
+          sed -i "s|(matrix_smtp_from_address)|$MATRIX_SMTP_FROM_ADDRESS|g" $GITHUB_WORKSPACE/matrix/homeserver.yaml
+
+      - name: Add secrets to turnserver.conf
+        env:
+          MATRIX_TURN_SHARED_SECRET: ${{ secrets.matrix_turn_shared_secret }}
+        run: |
+          sed -i "s|(matrix_turn_shared_secret)|$MATRIX_TURN_SHARED_SECRET|g" $GITHUB_WORKSPACE/matrix/turnserver.conf
+
+      - name: Add secrets to docker-compose.yml
+        env:
+          MATRIX_SYNCV3_POSTGRES: ${{ secrets.matrix_syncv3_postgres }}
+          MATRIX_SYNCV3_SECRET: ${{ secrets.matrix_syncv3_secret }}
+          MATRIX_SYNCV3_POSTGRES_PASSWORD: ${{ secrets.matrix_syncv3_postgres_password }}
+          MATRIX_POSTGRES_PASSWORD: ${{ secrets.matrix_postgres_password }}
+        run: |
+          sed -i "s|(matrix_syncv3_postgres)|$MATRIX_SYNCV3_POSTGRES|g" $GITHUB_WORKSPACE/matrix/docker-compose.yml
+          sed -i "s|(matrix_syncv3_secret)|$MATRIX_SYNCV3_SECRET|g" $GITHUB_WORKSPACE/matrix/docker-compose.yml
+          sed -i "s|(matrix_syncv3_postgres_password)|$MATRIX_SYNCV3_POSTGRES_PASSWORD|g" $GITHUB_WORKSPACE/matrix/docker-compose.yml
+          sed -i "s|(matrix_postgres_password)|$MATRIX_POSTGRES_PASSWORD|g" $GITHUB_WORKSPACE/matrix/docker-compose.yml
+
+
+      - name: Create Secrets
+        env:
+          MATRIX_SIGNING_KEY: ${{ secrets.MATRIX_SIGNING_KEY }}
+        run: |
+          touch $GITHUB_WORKSPACE/matrix/signing.key
+          echo "$MATRIX_SIGNING_KEY" > "$GITHUB_WORKSPACE/matrix/signing.key"
+
+      - name: Start Deployment
+        uses: FarisZR/docker-compose-gitops-action@v1.1
+        env:
+          POSTGRES_PASSWORD: ${{ secrets.matrix_postgres_password }}
+          MATRIX_TELEGRAM_POSTGRES_PASSWORD: ${{ secrets.matrix_telegram_postgres_password }}
+          MATRIX_DISCORD_POSTGRES_PASSWORD: ${{ secrets.matrix_discord_postgres_password }}
+          MATRIX_SIGNING_KEY: ${{ secrets.matrix_signing_key }}
+          MATRIX_HOOKSHOT_GITHUB_PRIVATE_KEY:  ${{ secrets.matrix_hookshot_github_private_key }}
+          MATRIX_HOOKSHOT_PASS_KEY:  ${{ secrets.matrix_hookshot_pass_key }}
+          MATRIX_SLIDING_SYNC_POSTGRES_PASSWORD: ${{ secrets.MATRIX_SLIDING_SYNC_POSTGRES_PASSWORD }}
+          MATRIX_SLIDING_SYNC_POSTGRES_CONNECTION_STRING: ${{ secrets.MATRIX_SLIDING_SYNC_POSTGRES_CONNECTION_STRING }}
+          MATRIX_SLIDING_SYNC_SECRET: ${{ secrets.MATRIX_SLIDING_SYNC_SECRET }}
+        with:
+          remote_docker_host: ${{ secrets.server_address }}
+          tailscale_ssh: true # no need for manual private and public keys
+          compose_file_path: matrix/docker-compose.yml
+          args: -p matrix up -d --remove-orphans
+          upload_directory: true
+          docker_compose_directory: matrix

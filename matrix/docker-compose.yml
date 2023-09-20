@@ -1,0 +1,118 @@
+networks:
+  default:
+  web:
+    external: true
+
+services:
+  postgres:
+    image: postgres:14.9-alpine@sha256:5ecfb3b719c4b439f846f2be3e44892cc1425917297c65ad654710504fd470a3
+    restart: always
+    # These will be used in homeserver.yaml later on
+    environment:
+      - POSTGRES_DB=synapse
+      - POSTGRES_USER=synapse
+      - POSTGRES_PASSWORD=(matrix_postgres_password)
+      - POSTGRES_INITDB_ARGS=--encoding=UTF-8 --lc-collate=C --lc-ctype=C
+    volumes:
+      - /home/ubuntu/matrix/postgresdata:/var/lib/postgresql/data
+    networks:
+      default:
+
+  synapse:
+    image: ghcr.io/matrix-org/synapse:v1.92.3@sha256:4564d73f081f51f45ed075bf0af58db738b5d88e9f400172e20d940fba662431
+    container_name: synapse
+    environment:
+      - UID=991
+      - GID=991
+      - SYNAPSE_CONFIG_DIR=config
+    restart: always
+    configs:
+      - source: synapse-homeserver
+        target: /config/homeserver.yaml
+        uid: "991"
+        gid: "991"
+      - source: synapse-log-config
+        target: /config/log.config
+        uid: "991"
+        gid: "991"
+    secrets:
+      - source: matrix-signing-key
+        target: signing.key
+        uid: "991"
+        gid: "991"
+    volumes:
+      - /home/ubuntu/matrix/media_store:/data/media_store:rw
+    healthcheck:
+      test: ["CMD", "curl", "-fSs", "http://localhost:8008/health"]
+      interval: 15s
+      timeout: 5s
+      retries: 3
+      start_period: 5s
+    networks:
+      default:
+      web:
+
+  coturn:
+    image: quay.io/coturn/coturn:4.6.2-r4@sha256:9bbbe48c90d270bd627477fb1221d370796e83fbdb8fc1db15587d1959f76704
+    restart: always
+    user: 0:0
+    userns_mode: host
+    #bridge networkes break quota protection for some reason, use host
+    network_mode: host
+    # ports:
+      # - '3478:3478'
+      # - '3478:3478/udp'
+      # - '48900-49200:48900-49200/udp'
+    environment:
+      - min-port=48900
+      - max-port=49200
+    volumes:
+      - caddy_data:/caddy-data:ro
+    configs:
+      - source: coturn
+        target: /etc/coturn/turnserver.conf
+
+  postgres-sync:
+    image: postgres:15.4-alpine@sha256:bebe7e3dd69095a65835f5d3f91a0a47bad3ad3870c6e2be98310f5718fd8494
+    restart: always
+    # These will be used in homeserver.yaml later on
+    environment:
+      - POSTGRES_DB=sync
+      - POSTGRES_USER=sync
+      - POSTGRES_PASSWORD=(matrix_syncv3_postgres_password)
+      - POSTGRES_INITDB_ARGS=--encoding=UTF-8 --lc-collate=C --lc-ctype=C
+    volumes:
+      - /home/ubuntu/matrix/postgresdata-sync:/var/lib/postgresql/data
+    networks:
+      default:
+
+  sliding-sync:
+    image: ghcr.io/matrix-org/sliding-sync:v0.99.10@sha256:9058d7b783620d0b378d96ef08c4e6902e39f29d0932d1d3a02439f1e1a733aa
+    restart: always
+    environment:
+      - SYNCV3_SERVER=https://matrix.fariszr.com
+      - SYNCV3_DB=(matrix_syncv3_postgres)
+      - SYNCV3_SECRET="(matrix_syncv3_secret)"
+    depends_on:
+      - postgres-sync
+      - synapse
+    networks:
+      web:
+      default:
+
+
+configs:
+  synapse-homeserver:
+    file: /home/ubuntu/matrix/homeserver.yaml
+  synapse-log-config:
+    file: /home/ubuntu/matrix/log.config
+  coturn:
+    file: /home/ubuntu/matrix/turnserver.conf
+
+secrets:
+  matrix-signing-key:
+    file: /home/ubuntu/matrix/signing.key #added by the create secrets step
+
+volumes:
+  caddy_data:
+    external: true
