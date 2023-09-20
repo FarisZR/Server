@@ -1,0 +1,61 @@
+networks: 
+  default:
+  web:
+    external: true
+
+services:
+  plausible_db:
+    restart: unless-stopped
+    image: postgres:14.9-alpine@sha256:5ecfb3b719c4b439f846f2be3e44892cc1425917297c65ad654710504fd470a3
+    volumes:
+      - /home/ubuntu/plausible/postgresql:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_PASSWORD=(plausible_postgres_password)
+
+  plausible_events_db:
+    restart: unless-stopped
+    image: clickhouse/clickhouse-server:23.3.7.5-alpine@sha256:d530a555f565cb1c84b0380d02c88405623412c600ed8acb3090b27b7c7ef636
+    volumes:
+      - /home/ubuntu/plausible/event-data:/var/lib/clickhouse
+    configs:
+      - source: clickhouse-config
+        target: /etc/clickhouse-server/config.d/logging.xml
+      - source: clickhouse-user-config
+        target: /etc/clickhouse-server/users.d/logging.xml
+    ulimits:
+      nofile:
+        soft: 262144
+        hard: 262144
+    networks:
+      default:
+
+  plausible:
+    restart: unless-stopped
+    image: plausible/analytics:v2.0.0@sha256:90e490dd4e9a1b19d8edfe2af14607cd11e6cfb348f3d264b37eb9eedda5625d
+    container_name: plausible
+    command: sh -c "sleep 10 && /entrypoint.sh db createdb && /entrypoint.sh db migrate && /entrypoint.sh run"
+    expose:
+      - 8000
+    depends_on:
+      - plausible_db
+      - plausible_events_db
+    environment:
+      - BASE_URL=https://pa.fariszr.com
+      - SECRET_KEY_BASE=(plausible_secret_key_base)
+      - DISABLE_REGISTRATION=true
+      - MAILER_EMAIL="(plausible_from_address)"
+      - SMTP_HOST_ADDR="(smtp_endpoint)"
+      - SMTP_HOST_PORT=587
+      - SMTP_USER_NAME="(smtp_username)"
+      - SMTP_USER_PWD="(smtp_password)"
+      - GOOGLE_CLIENT_ID=(plausible_google_client_id)
+      - GOOGLE_CLIENT_SECRET=(plausible_google_client_secret)
+    networks:
+      default:
+      web:
+
+configs:
+  clickhouse-config:
+    file: /home/ubuntu/plausible/clickhouse-config.xml
+  clickhouse-user-config:
+    file: /home/ubuntu/plausible/clickhouse-user-config.xml

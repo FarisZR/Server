@@ -1,0 +1,59 @@
+name: deploy-plausible
+
+on:
+  push:
+    paths:
+      - '.github/workflows/plausible.yml'
+      - 'plausible/**'
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: Plausible
+      url: https://pa.fariszr.com
+    steps:
+      - name: checkout
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Tailscale
+        uses: tailscale/github-action@4e4c49acaa9818630ce0bd7a564372c17e33fb4d
+        with:
+          oauth-client-id: ${{ secrets.TAILSCALE_CLIENT_ID }}
+          oauth-secret: ${{ secrets.TAILSCALE_SECRET }}
+          tags: tag:deploy-ci
+          hostname: Github-actions
+          version: ${{ vars.TAILSCALE_VERSION }}
+
+      - name: Add secrets to docker-compose.yml
+        env:
+          PLAUSIBLE_GOOGLE_CLIENT_ID: ${{ secrets.plausible_google_client_id }}
+          PLAUSIBLE_GOOGLE_CLIENT_SECRET: ${{ secrets.plausible_google_client_secret }}
+          PLAUSIBLE_SECRET_KEY_BASE: ${{ secrets.plausible_secret_key_base }}
+          PLAUSIBLE_POSTGRES_PASSWORD: ${{ secrets.plausible_postgres_password }}
+          PLAUSIBLE_FROM_ADDRESS: ${{ secrets.plausible_from_address }}
+          SMTP_PASSWORD: ${{ secrets.smtp_password }}
+          SMTP_USERNAME: ${{ secrets.smtp_username }}
+          SMTP_ENDPOINT: ${{ secrets.smtp_endpoint }}
+        run: |
+          sed -i "s|(plausible_google_client_id)|$PLAUSIBLE_GOOGLE_CLIENT_ID|g" $GITHUB_WORKSPACE/plausible/docker-compose.yml
+          sed -i "s|(plausible_google_client_secret)|$PLAUSIBLE_GOOGLE_CLIENT_SECRET|g" $GITHUB_WORKSPACE/plausible/docker-compose.yml
+          sed -i "s|(plausible_secret_key_base)|$PLAUSIBLE_SECRET_KEY_BASE|g" $GITHUB_WORKSPACE/plausible/docker-compose.yml
+          sed -i "s|(plausible_postgres_password)|$PLAUSIBLE_POSTGRES_PASSWORD|g" $GITHUB_WORKSPACE/plausible/docker-compose.yml
+          sed -i "s|(smtp_password)|$SMTP_PASSWORD|g" $GITHUB_WORKSPACE/plausible/docker-compose.yml
+          sed -i "s|(smtp_username)|$SMTP_USERNAME|g" $GITHUB_WORKSPACE/plausible/docker-compose.yml
+          sed -i "s|(smtp_endpoint)|$SMTP_ENDPOINT|g" $GITHUB_WORKSPACE/plausible/docker-compose.yml
+
+      - name: Start Deployment
+        uses: FarisZR/docker-compose-gitops-action@v1.0.1
+        with:
+          remote_docker_host: ${{ secrets.server_address }}
+          tailscale_ssh: true # no need for manual private and public keys
+          compose_file_path: plausible/docker-compose.yml
+          args: -p plausible up -d --remove-orphans
+          upload_directory: true
+          docker_compose_directory: plausible
