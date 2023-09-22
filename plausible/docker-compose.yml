@@ -1,5 +1,6 @@
 networks: 
   default:
+    enable_ipv6: true
   web:
     external: true
 
