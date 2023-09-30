@@ -59,13 +59,14 @@ services:
     user: 0:0
     userns_mode: host
     #bridge networkes break quota protection for some reason, use host
-    network_mode: host
-    # ports:
-      # - '3478:3478'
-      # - '3478:3478/udp'
-      # - '48900-49200:48900-49200/udp'
+    # network_mode: host
+    ports:
+      - '3478:3478'
+      - '3478:3478/udp'
+      - '5349:5349/udp'
+      - '49000-49200:49000-49200/udp'
     environment:
-      - min-port=48900
+      - min-port=49000
       - max-port=49200
     volumes:
       - caddy_data:/caddy-data:ro
