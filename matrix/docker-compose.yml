@@ -54,8 +54,7 @@ services:
       web:
 
   eturnal:
-    image: ghcr.io/processone/eturnal:1.12@sha256:c4ad43bc6a26d418455a0c89df9ce9850798c0a1401fc751ce43d831fd34e19b
-    restart: always
+    image: ghcr.io/processone/eturnal:1.12@sha256:80ffa5c07a28545e68a0e76273b253d199c65f188e5efc78da54f84e0244d6f9
     user: 0:0 # to access caddy certs
     ports:
       - '3478:3478'
