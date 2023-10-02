@@ -53,26 +53,19 @@ services:
       default:
       web:
 
-  coturn:
-    image: quay.io/coturn/coturn:4.6.2-r4@sha256:9bbbe48c90d270bd627477fb1221d370796e83fbdb8fc1db15587d1959f76704
-    restart: always
-    user: 0:0
-    userns_mode: host
-    #bridge networkes break quota protection for some reason, use host
-    # network_mode: host
+  eturnal:
+    image: ghcr.io/processone/eturnal:1.12@sha256:80ffa5c07a28545e68a0e76273b253d199c65f188e5efc78da54f84e0244d6f9
+    user: 0:0 # to access caddy certs
     ports:
       - '3478:3478'
+      - '49000-49200:49000-49200'
       - '3478:3478/udp'
-      - '5349:5349/udp'
       - '49000-49200:49000-49200/udp'
-    environment:
-      - min-port=49000
-      - max-port=49200
     volumes:
       - caddy_data:/caddy-data:ro
     configs:
-      - source: coturn
-        target: /etc/coturn/turnserver.conf
+      - source: eturnal
+        target: /etc/eturnal.yml
 
   postgres-sync:
     image: postgres:15.4-alpine@sha256:bebe7e3dd69095a65835f5d3f91a0a47bad3ad3870c6e2be98310f5718fd8494
@@ -108,9 +101,8 @@ configs:
     file: /home/ubuntu/matrix/homeserver.yaml
   synapse-log-config:
     file: /home/ubuntu/matrix/log.config
-  coturn:
-    file: /home/ubuntu/matrix/turnserver.conf
-
+  eturnal:
+    file: /home/ubuntu/matrix/eturnal.yml
 secrets:
   matrix-signing-key:
     file: /home/ubuntu/matrix/signing.key #added by the create secrets step
