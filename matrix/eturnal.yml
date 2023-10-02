@@ -43,10 +43,10 @@ eturnal:
   strict_expiry: false      # This is the default.
 
   ## Logging configuration:
-  log_level: warning           # critical | error | warning | notice | info | debug
+  log_level: info           # critical | error | warning | notice | info | debug
   log_rotate_size: 10485760 # 10 MiB (default: unlimited, i.e., no rotation).
   log_rotate_count: 2      # Keep 10 rotated log files.
-  #log_dir: stdout          # Enable for logging to the terminal/journal.
+  log_dir: stdout          # Enable for logging to the terminal/journal.
 
   ## See: https://eturnal.net/doc/#Module_Configuration
   modules:
