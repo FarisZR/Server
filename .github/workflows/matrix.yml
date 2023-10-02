@@ -51,11 +51,11 @@ jobs:
           sed -i "s|(smtp_endpoint)|$SMTP_ENDPOINT|g" $GITHUB_WORKSPACE/matrix/homeserver.yaml
           sed -i "s|(matrix_smtp_from_address)|$MATRIX_SMTP_FROM_ADDRESS|g" $GITHUB_WORKSPACE/matrix/homeserver.yaml
 
-      - name: Add secrets to turnserver.conf
+      - name: Add secrets to eturnal.yml
         env:
           MATRIX_TURN_SHARED_SECRET: ${{ secrets.matrix_turn_shared_secret }}
         run: |
-          sed -i "s|(matrix_turn_shared_secret)|$MATRIX_TURN_SHARED_SECRET|g" $GITHUB_WORKSPACE/matrix/turnserver.conf
+          sed -i "s|(matrix_turn_shared_secret)|$MATRIX_TURN_SHARED_SECRET|g" $GITHUB_WORKSPACE/matrix/eturnal.yml
 
       - name: Add secrets to docker-compose.yml
         env:
