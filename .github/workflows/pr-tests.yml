@@ -1,0 +1,35 @@
+name: Test docker-compose files
+
+on:
+  pull_request:
+    paths:
+      - '**/docker-compose.yml'
+      - '**/docker-compose.yaml'
+
+## Thanks Bing AI!
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Install Compose
+        uses: ndeloof/install-compose-action@v0.0.1
+      - run: docker compose --version
+
+      - name: Get changed files
+        id: changed-files
+        uses: tj-actions/changed-files@v35
+        with:
+          files: |
+            **/docker-compose.yml
+            **/docker-compose.yaml
+      - name: Test docker-compose files
+        run: |
+          for file in ${{ steps.changed-files.outputs.all_changed_files }}; do
+            echo "Testing $file"
+            docker compose -f $file config 
+            docker compose -f $file pull 
+          done
