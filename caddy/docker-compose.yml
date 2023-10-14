@@ -6,7 +6,7 @@ networks:
 
 services:
   caddy:
-    image: oci.fariszr.com/fariszr/caddy-dns:desec-alpine@sha256:f8858b02e20eaf364c3fa02f81cbb5001cdef1f52cdf153baafefec2c3347c1d
+    image: oci.fariszr.com/fariszr/caddy-dns:desec-alpine@sha256:e8a177fc40dcf862e4f272644532f9b81e112ba67dd97b023ee369fffd7e9df2
     container_name: caddy
     restart: always
     configs:
