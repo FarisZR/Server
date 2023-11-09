@@ -84,7 +84,7 @@ services:
       default:
 
   sliding-sync:
-    image: ghcr.io/matrix-org/sliding-sync:v0.99.11@sha256:013b50fa5636323d37bc2c583c45da09c47775f6cdcee3257413bd066e2e7ab1
+    image: ghcr.io/matrix-org/sliding-sync:v0.99.12@sha256:a912eb929d6cda5e6ac81d0ac863eaf6404f1f8a8048b2581003d1e1af41e168
     restart: always
     environment:
       - SYNCV3_SERVER=https://matrix.fariszr.com
