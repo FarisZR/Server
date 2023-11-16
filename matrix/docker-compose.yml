@@ -20,7 +20,7 @@ services:
       default:
 
   synapse:
-    image: ghcr.io/matrix-org/synapse:v1.95.1@sha256:1154258cd4baec6d15ddf6b72ac34ac175a3659c611ea2d5fa3e5cc7543e5ec2
+    image: ghcr.io/matrix-org/synapse:v1.96.0@sha256:e90b6d1e09c0fcd922e4cba077df933f2f3775de1e9fc03ad9ff0aa0a529b256
     container_name: synapse
     environment:
       - UID=991
