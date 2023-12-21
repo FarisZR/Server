@@ -15,7 +15,7 @@ services:
 
   plausible_events_db:
     restart: unless-stopped
-    image: clickhouse/clickhouse-server:23.11.2.11-alpine@sha256:87aa3e079614f3505e94aa12ad37c979413b351cfa38e02d83e58035fb069004
+    image: clickhouse/clickhouse-server:23.11.3.23-alpine@sha256:3e28af1d7bf09b8e0a5d595ef9fbc8cd1dc235df6ec981ff6a2afa8f0973bc0a
     volumes:
       - /home/ubuntu/plausible/event-data:/var/lib/clickhouse
     configs:
