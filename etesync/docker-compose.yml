@@ -10,7 +10,7 @@ services:
     container_name: "etebase"
     volumes:
       - /home/ubuntu/etesync/data:/data
-      - /home/ubuntu/etesync/static:/srv/etebase:rw
+      - /home/ubuntu/etesync/static:/srv/etebase/static:rw
     expose:
       - 3753
     environment:
