@@ -1,5 +1,6 @@
 networks:
   web:
+    external: true
 
 services:
   radicale:
@@ -43,7 +44,7 @@ services:
 
 configs:
   radicale-config:
-    file: /home/ubuntu/radicale/conf
+    file: /home/ubuntu/radicale/config
 secrets:
   htpasswd:
     file: /home/ubuntu/radicale/htpasswd
