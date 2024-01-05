@@ -25,6 +25,9 @@ services:
     depends_on:
       - postgres
     restart: always
+    networks:
+      web:
+      default:
 
   postgres:
     image: postgres:16-alpine
