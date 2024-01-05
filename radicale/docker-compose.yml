@@ -12,7 +12,7 @@ services:
     read_only: true
     configs:
       - source: radicale-config
-        target: /config
+        target: /config/config
     secrets:
       - source: htpasswd
         target: htpasswd
@@ -38,7 +38,7 @@ services:
       retries: 3
     restart: unless-stopped
     volumes:
-      - /home/ubuntu/radicale:/data
+      - /home/ubuntu/radicale/data:/data
     networks:
       web:
 
