@@ -12,7 +12,7 @@ services:
       - /home/ubuntu/etesync/data:/data
       - /home/ubuntu/etesync/static:/srv/etebase/static:rw
     expose:
-      - 3753
+      - 3735
     environment:
       SERVER: uvicorn
       DB_ENGINE: postgres

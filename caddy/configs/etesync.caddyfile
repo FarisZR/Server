@@ -1,5 +1,5 @@
 {$ETESYNC_DOMAIN} {
-	reverse_proxy etebase:3753
+	reverse_proxy etebase:3735
 	encode zstd gzip
 	tls {
 		propagation_timeout 5m
