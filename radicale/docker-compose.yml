@@ -1,0 +1,49 @@
+networks:
+  web:
+
+services:
+  radicale:
+    image: tomsquest/docker-radicale
+    container_name: radicale
+    # ports:
+    #   - 127.0.0.1:5232:5232
+    init: true
+    read_only: true
+    configs:
+      - source: radicale-config
+        target: /config
+    secrets:
+      - source: htpasswd
+        target: htpasswd
+        uid: "2999"
+        gid: "2999"
+    security_opt:
+      - no-new-privileges:true
+    cap_drop:
+      - ALL
+    cap_add:
+      - SETUID
+      - SETGID
+      - CHOWN
+      - KILL
+    deploy:
+      resources:
+        limits:
+          memory: 256M
+          pids: 50
+    healthcheck:
+      test: curl -f http://127.0.0.1:5232 || exit 1
+      interval: 30s
+      retries: 3
+    restart: unless-stopped
+    volumes:
+      - /home/ubuntu/radicale:/data
+    networks:
+      web:
+
+configs:
+  radicale-config:
+    file: /home/ubuntu/radicale/conf
+secrets:
+  htpasswd:
+    file: /home/ubuntu/radicale/htpasswd
