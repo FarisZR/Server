@@ -4,15 +4,12 @@ networks:
 
 services:
   radicale:
-    image: tomsquest/docker-radicale
+    image: tomsquest/docker-radicale:3.1.8.3
     container_name: radicale
     # ports:
     #   - 127.0.0.1:5232:5232
     init: true
     read_only: true
-    configs:
-      - source: radicale-config
-        target: /config/config
     secrets:
       - source: htpasswd
         target: htpasswd
@@ -39,12 +36,10 @@ services:
     restart: unless-stopped
     volumes:
       - /home/ubuntu/radicale/data:/data
+      - /home/ubuntu/radicale/custom_config:/config:ro
     networks:
       web:
 
-configs:
-  radicale-config:
-    file: /home/ubuntu/radicale/config
 secrets:
   htpasswd:
     file: /home/ubuntu/radicale/htpasswd
