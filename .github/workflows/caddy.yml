@@ -42,3 +42,5 @@ jobs:
           tailscale_ssh: true # no need for manual private and public keys
           compose_file_path: caddy/docker-compose.yml
           args: -p caddy up -d --remove-orphans
+          upload_directory: true
+          docker_compose_directory: caddy
