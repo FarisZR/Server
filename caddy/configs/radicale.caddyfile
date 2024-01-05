@@ -1,4 +1,6 @@
 {$RADICALE_DOMAIN} {
-	reverse_proxy radicale:5232
+	reverse_proxy radicale:5232 {
+		header_up X-Script-Name /radicale/
+	}
 	encode zstd gzip
 }
