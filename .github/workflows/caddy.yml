@@ -30,8 +30,10 @@ jobs:
       - name: Add secrets to docker-compose.yml
         env:
           DESEC_TOKEN: ${{ secrets.caddy_desec_token }}
+          RADICALE_DOMAIN: ${{ secrets.radicale_domain }}
         run: |
           sed -i "s|(DESEC_TOKEN)|$DESEC_TOKEN|g" $GITHUB_WORKSPACE/caddy/docker-compose.yml
+          sed -i "s|(RADICALE_DOMAIN)|$RADICALE_DOMAIN|g" $GITHUB_WORKSPACE/caddy/docker-compose.yml
 
       - name: Start Deployment
         uses: FarisZR/docker-compose-gitops-action@v1.0.1

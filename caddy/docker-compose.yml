@@ -14,6 +14,7 @@ services:
         target: /etc/caddy/Caddyfile
     environment:
       - DESEC_TOKEN=(DESEC_TOKEN)
+      - RADICALE_DOMAIN=(RADICALE_DOMAIN)
     ports:
       - "80:80"
       - "443:443"
