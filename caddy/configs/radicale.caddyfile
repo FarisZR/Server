@@ -1,3 +1,4 @@
 {$RADICALE_DOMAIN} {
 	reverse_proxy radicale:5232
+	encode zstd gzip
 }
