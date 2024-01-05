@@ -32,8 +32,8 @@ jobs:
         env:
           RADICALE_HTPASSWD: ${{ secrets.radicale_htpasswd }}
         run: |
-          touch $GITHUB_WORKSPACE/radicale/\
-          echo "$MATRIX_SIGNING_KEY" > "$GITHUB_WORKSPACE/matrix/signing.key"
+          touch $GITHUB_WORKSPACE/radicale/htpasswd
+          echo "$RADICALE_HTPASSWD" > "$GITHUB_WORKSPACE/radicale/htpasswd"
 
       - name: Start Deployment
         uses: FarisZR/docker-compose-gitops-action@v1.0.1
