@@ -1,0 +1,4 @@
+{$ETESYNC_DOMAIN} {
+	reverse_proxy etebase:3753
+	encode zstd gzip
+}

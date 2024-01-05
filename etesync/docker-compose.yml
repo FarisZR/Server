@@ -1,0 +1,38 @@
+networks:
+  web:
+    external: true
+  default:
+    enable_ipv6: true
+
+services:
+  etebase:
+    image: victorrds/etebase:alpine
+    container_name: "etebase"
+    volumes:
+      - /home/ubuntu/etesync/data:/data
+      - /home/ubuntu/etesync/static:/srv/etebase:rw
+    expose:
+      - 3753
+    environment:
+      SERVER: uvicorn
+      DB_ENGINE: postgres
+      DATABASE_NAME: etebase
+      DATABASE_USER: etebase
+      DATABASE_PASSWORD: (ETESYNC_DB_PASS)
+      DATABASE_HOST: postgres
+      ALLOWED_HOSTS: (ETESYNC_DOMAIN)
+      AUTO_UPDATE: true
+    depends_on:
+      - postgres
+    restart: always
+
+  postgres:
+    image: postgres:16-alpine
+    container_name: "postgres"
+    volumes:
+      - /home/ubuntu/etesync/postgres/data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_PASSWORD: (ETESYNC_DB_PASS)
+      POSTGRES_USER: etebase
+      POSTGRES_DB: etebase
+    restart: always
