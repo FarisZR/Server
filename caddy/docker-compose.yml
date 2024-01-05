@@ -6,7 +6,7 @@ networks:
 
 services:
   caddy:
-    image: oci.fariszr.com/fariszr/caddy-dns:desec-alpine@sha256:1d7e6c3413870d590b0d7325d56da46bad83364ff56a96f62b1567586324f7a5
+    image: quay.io/fariszr/caddy-dns:desec-alpine@sha256:1d7e6c3413870d590b0d7325d56da46bad83364ff56a96f62b1567586324f7a5
     container_name: caddy
     restart: always
     configs:
@@ -15,6 +15,7 @@ services:
     environment:
       - DESEC_TOKEN=(DESEC_TOKEN)
       - RADICALE_DOMAIN=(RADICALE_DOMAIN)
+      - ETESYNC_DOMAIN=(ETESYNC_DOMAIN)
     ports:
       - "80:80"
       - "443:443"
