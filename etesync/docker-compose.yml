@@ -30,7 +30,7 @@ services:
       default:
 
   postgres:
-    image: postgres:16-alpine@sha256:c6279e249429546eb3360dc41e67b49e266897b6b7124ea4ada7acc18537408f
+    image: postgres:16-alpine@sha256:bbd7346fab25b7e0b25f214829d6ebfb78ef0465059492e46dee740ce8fcd844
     container_name: "postgres"
     volumes:
       - /home/ubuntu/etesync/postgres/data:/var/lib/postgresql/data
