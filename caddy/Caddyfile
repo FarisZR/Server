@@ -6,4 +6,39 @@ turn.fariszr.com {
 	abort
 }
 
-import /etc/caddy/configs/*.caddyfile
+pa.fariszr.com {
+	rewrite /js/pls.js /js/plausible.js
+	rewrite /js/pls2.js /js/plausible.hash.js
+	rewrite /js/pls3.js /js/plausible.outbound-links.js
+	rewrite /js/pls4.js /js/plausible.hash.outbound-links.js
+	reverse_proxy plausible:8000
+	encode zstd gzip
+}
+
+matrix.fariszr.com {
+	reverse_proxy synapse:8008
+	encode zstd gzip
+	# add sliding sync availability (https://github.com/matrix-org/sliding-sync)
+	respond /.well-known/matrix/client ` {
+		"m.homeserver": {
+			"base_url":"https://matrix.fariszr.com"
+		}		,
+		"org.matrix.msc3575.proxy": {
+			"url":"https://syncv3.fariszr.com"
+		}
+	}	`
+}
+
+syncv3.fariszr.com {
+	reverse_proxy sliding-sync:8008
+	encode zstd gzip
+}
+
+{$ETESYNC_DOMAIN} {
+	reverse_proxy etebase:3735
+	encode zstd gzip
+	tls {
+		propagation_timeout 5m
+		resolvers 1.1.1.1 9.9.9.11
+	}
+}
