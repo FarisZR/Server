@@ -13,7 +13,6 @@ services:
       - source: Caddyfile
         target: /etc/caddy/Caddyfile
     environment:
-      - DESEC_TOKEN=(DESEC_TOKEN)
       - ETESYNC_DOMAIN=(ETESYNC_DOMAIN)
     ports:
       - "80:80"
@@ -22,7 +21,6 @@ services:
       # - "8448:8448"
     volumes:
       - /home/ubuntu/caddy/configs:/etc/caddy/configs:ro
-      - /home/ubuntu/web:/web:ro
       - data:/data
       - config:/config
     networks:
