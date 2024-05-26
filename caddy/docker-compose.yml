@@ -6,7 +6,7 @@ networks:
 
 services:
   caddy:
-    image: quay.io/fariszr/caddy-dns:desec-alpine@sha256:eb3481b436791cd2fef682a18f818a657fcebd346883c49effd76814ec54b5be
+    image: caddy:2.7.6-alpine@sha256:2e1d4592f1718bb47645da5a83a846fe19094f18e6c921fdf56d174f05c63213
     container_name: caddy
     restart: always
     configs:
