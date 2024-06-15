@@ -6,7 +6,7 @@ networks:
 
 services:
   etebase:
-    image: victorrds/etebase:alpine@sha256:57e1bb06366d14df615852c5977855fe11e5afc6375e0441b33e2bb06e55fb83
+    image: victorrds/etebase:alpine@sha256:47a35dd707ffecb5d92756255ad92d1c07ffa287cced44a81c89607c41e45bca
     container_name: "etebase"
     volumes:
       - /home/ubuntu/etesync/data:/data
