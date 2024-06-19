@@ -6,7 +6,7 @@ networks:
 
 services:
   postgres:
-    image: postgres:14.12-alpine@sha256:a8acc7e332967b5091330f5a6d34f718dd20591541407cd10da2fc65d479efa6
+    image: postgres:14.12-alpine@sha256:04b4484989c8b2efa15c48438aa0c18e9fe02cad1a36f63fcec6ab27a203986b
     restart: always
     # These will be used in homeserver.yaml later on
     environment:
