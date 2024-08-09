@@ -32,7 +32,7 @@ services:
 
   plausible:
     restart: unless-stopped
-    image: plausible/analytics:v2.0.0@sha256:cd5f75e1399073669b13b4151cc603332a825324d0b8f13dfc9de9112a3c68a1
+    image: ghcr.io/plausible/community-edition:v2.1.1@sha256:ed5298adc5a485d76420b60339213908b1c5cc19c7e30598f69798d20081e479
     container_name: plausible
     command: sh -c "sleep 10 && /entrypoint.sh db createdb && /entrypoint.sh db migrate && /entrypoint.sh run"
     expose:
@@ -43,12 +43,14 @@ services:
     environment:
       - BASE_URL=https://pa.fariszr.com
       - SECRET_KEY_BASE=(plausible_secret_key_base)
+      - TOTP_VAULT_KEY="(plausible_totp_vault_key)"
       - DISABLE_REGISTRATION=true
       - MAILER_EMAIL="(plausible_from_address)"
       - SMTP_HOST_ADDR="(smtp_endpoint)"
       - SMTP_HOST_PORT=587
       - SMTP_USER_NAME="(smtp_username)"
       - SMTP_USER_PWD="(smtp_password)"
+      - MAILER_ADAPTER=Bamboo.Mua
       - GOOGLE_CLIENT_ID=(plausible_google_client_id)
       - GOOGLE_CLIENT_SECRET=(plausible_google_client_secret)
     networks:
