@@ -15,9 +15,12 @@ services:
     environment:
       - ETESYNC_DOMAIN=(ETESYNC_DOMAIN)
     ports:
-      - "80:80"
-      - "443:443"
-      - "443:443/udp"
+      - "10.0.0.143:80:80"
+      - "10.0.0.143:443:443"
+      - "10.0.0.143:443:443/udp"
+      - "[2603:c020:8011:9ede::23]:80:80"
+      - "[2603:c020:8011:9ede::23]:443:443"
+      - "[2603:c020:8011:9ede::23]:443:443/udp"
       # - "8448:8448"
     volumes:
       - /home/ubuntu/caddy/configs:/etc/caddy/configs:ro
