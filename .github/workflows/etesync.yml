@@ -17,15 +17,6 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Tailscale
-        uses: tailscale/github-action@7a0b30ed3517c2244d1330e39467b95f067a33bd
-        with:
-          oauth-client-id: ${{ secrets.TAILSCALE_CLIENT_ID }}
-          oauth-secret: ${{ secrets.TAILSCALE_SECRET }}
-          tags: tag:deploy-ci
-          hostname: Github-actions
-          version: ${{ vars.TAILSCALE_VERSION }}
-
       # allows for quicker local debugging
       - name: Add secrets to docker-compose.yml
         env:
@@ -39,7 +30,8 @@ jobs:
         uses: FarisZR/docker-compose-gitops-action@v1.0.1
         with:
           remote_docker_host: ${{ secrets.server_address }}
-          tailscale_ssh: true # no need for manual private and public keys
+          ssh_public_key: ${{ secrets.public_ssh_key }}
+          ssh_private_key: ${{ secrets.private_ssh_key }}
           compose_file_path: etesync/docker-compose.yml
           args: -p etesync up -d --remove-orphans
           upload_directory: true
