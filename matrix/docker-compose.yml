@@ -71,7 +71,7 @@ services:
         target: /etc/eturnal.yml
 
   postgres-sync:
-    image: postgres:15.8-alpine@sha256:fa484d844b88ac34811daf3da66af1fd17e34b0e1ff5d1b6f904269c85890dc0
+    image: postgres:15.8-alpine@sha256:362404e4f27e4f477c6cd4a76c65f06d387b7fda2caf216e656b17bf00f9908f
     restart: always
     # These will be used in homeserver.yaml later on
     environment:
