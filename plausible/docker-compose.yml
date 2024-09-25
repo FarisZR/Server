@@ -32,7 +32,7 @@ services:
 
   plausible:
     restart: unless-stopped
-    image: ghcr.io/plausible/community-edition:v2.1.1@sha256:ed5298adc5a485d76420b60339213908b1c5cc19c7e30598f69798d20081e479
+    image: ghcr.io/plausible/community-edition:v2.1.2@sha256:a4ba555cae638e6e3606509b9e53b87ef4c8466d939f48bdd717365b68981398
     container_name: plausible
     command: sh -c "sleep 10 && /entrypoint.sh db createdb && /entrypoint.sh db migrate && /entrypoint.sh run"
     expose:
