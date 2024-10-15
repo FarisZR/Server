@@ -54,7 +54,7 @@ services:
       web:
 
   eturnal:
-    image: ghcr.io/processone/eturnal:edge@sha256:576f93b9725e0d413604a23abd18d98799e040a6017dcce88568b87e9c562573
+    image: ghcr.io/processone/eturnal:edge@sha256:689d33ebf399847904769ee5abb543200ed623fcde67d36ca75dac1cb285ada5
     userns_mode: host
     restart: always
     user: 0:0 # to access caddy certs
