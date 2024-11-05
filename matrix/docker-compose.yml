@@ -70,35 +70,6 @@ services:
       - source: eturnal
         target: /etc/eturnal.yml
 
-  postgres-sync:
-    image: postgres:15.8-alpine@sha256:620dc79c45816cff4f38f0b49c71f15a3bc6bab9439ba1eea3a76d23ebcf1e4d
-    restart: always
-    # These will be used in homeserver.yaml later on
-    environment:
-      - POSTGRES_DB=sync
-      - POSTGRES_USER=sync
-      - POSTGRES_PASSWORD=(matrix_syncv3_postgres_password)
-      - POSTGRES_INITDB_ARGS=--encoding=UTF-8 --lc-collate=C --lc-ctype=C
-    volumes:
-      - /home/ubuntu/matrix/postgresdata-sync:/var/lib/postgresql/data
-    networks:
-      default:
-
-  sliding-sync:
-    image: ghcr.io/matrix-org/sliding-sync:v0.99.19@sha256:39ca7f70118774b490e53e9f677bc4a7a2dbd750c6db7a18479abc430b073048
-    restart: always
-    environment:
-      - SYNCV3_SERVER=https://matrix.fariszr.com
-      - SYNCV3_DB=(matrix_syncv3_postgres)
-      - SYNCV3_SECRET="(matrix_syncv3_secret)"
-    depends_on:
-      - postgres-sync
-      - synapse
-    networks:
-      web:
-      default:
-
-
 configs:
   synapse-homeserver:
     file: /home/ubuntu/matrix/homeserver.yaml

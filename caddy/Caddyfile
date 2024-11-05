@@ -22,9 +22,6 @@ matrix.fariszr.com {
 	respond /.well-known/matrix/client ` {
 		"m.homeserver": {
 			"base_url":"https://matrix.fariszr.com"
-		}		,
-		"org.matrix.msc3575.proxy": {
-			"url":"https://syncv3.fariszr.com"
 		}
 	}	`
 }
