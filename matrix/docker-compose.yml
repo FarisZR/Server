@@ -15,7 +15,7 @@ services:
       - POSTGRES_PASSWORD=(matrix_postgres_password)
       - POSTGRES_INITDB_ARGS=--encoding=UTF-8 --lc-collate=C --lc-ctype=C
     volumes:
-      - /home/ubuntu/matrix/postgresdata:/var/lib/postgresql/data
+      - /home/fzr/matrix/postgresdata:/var/lib/postgresql/data:z
     networks:
       default:
 
@@ -42,7 +42,7 @@ services:
         uid: "991"
         gid: "991"
     volumes:
-      - /home/ubuntu/matrix/media_store:/data/media_store:rw
+      - /home/fzr/matrix/media_store:/data/media_store:z
     healthcheck:
       test: ["CMD", "curl", "-fSs", "http://localhost:8008/health"]
       interval: 15s
@@ -72,14 +72,14 @@ services:
 
 configs:
   synapse-homeserver:
-    file: /home/ubuntu/matrix/homeserver.yaml
+    file: /home/fzr/matrix/homeserver.yaml
   synapse-log-config:
-    file: /home/ubuntu/matrix/log.config
+    file: /home/fzr/matrix/log.config
   eturnal:
-    file: /home/ubuntu/matrix/eturnal.yml
+    file: /home/fzr/matrix/eturnal.yml
 secrets:
   matrix-signing-key:
-    file: /home/ubuntu/matrix/signing.key #added by the create secrets step
+    file: /home/fzr/matrix/signing.key #added by the create secrets step
 
 volumes:
   caddy_data:
