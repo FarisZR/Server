@@ -26,11 +26,6 @@ matrix.fariszr.com {
 	}	`
 }
 
-syncv3.fariszr.com {
-	reverse_proxy sliding-sync:8008
-	encode zstd gzip
-}
-
 {$ETESYNC_DOMAIN} {
 	reverse_proxy etebase:3735
 	encode zstd gzip
