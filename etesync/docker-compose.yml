@@ -10,7 +10,7 @@ services:
     container_name: "etebase"
     volumes:
       - /home/fzr/etesync/data:/data:z
-      - /home/fzr/etesync/static:/srv/etebase/static::z
+      - /home/fzr/etesync/static:/srv/etebase/static:z
     expose:
       - 3735
     environment:
