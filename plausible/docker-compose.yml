@@ -9,7 +9,7 @@ services:
     restart: unless-stopped
     image: postgres:14.13-alpine@sha256:2d28cf41ec156f9a6dc9489fd3e5b59888f89229d68fc622efbfbe576e114b13
     volumes:
-      - /home/ubuntu/plausible/postgresql:/var/lib/postgresql/data
+      - /home/fzr/plausible/postgresql:/var/lib/postgresql/data:z
     environment:
       - POSTGRES_PASSWORD=(plausible_postgres_password)
 
@@ -17,7 +17,7 @@ services:
     restart: unless-stopped
     image: clickhouse/clickhouse-server:24.3.3.102-alpine
     volumes:
-      - /home/ubuntu/plausible/event-data:/var/lib/clickhouse
+      - /home/fzr/plausible/event-data:/var/lib/clickhouse:z
     configs:
       - source: clickhouse-config
         target: /etc/clickhouse-server/config.d/logging.xml
@@ -59,6 +59,6 @@ services:
 
 configs:
   clickhouse-config:
-    file: /home/ubuntu/plausible/clickhouse-config.xml
+    file: /home/fzr/plausible/clickhouse-config.xml
   clickhouse-user-config:
-    file: /home/ubuntu/plausible/clickhouse-user-config.xml
+    file: /home/fzr/plausible/clickhouse-user-config.xml
