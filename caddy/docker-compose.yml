@@ -6,7 +6,7 @@ networks:
 
 services:
   caddy:
-    image: caddy:2.8.4-alpine@sha256:33937b9d51461ea87794350c1c09ce53f327802508929d78f3b5642533f2f7db
+    image: oci.fariszr.com/fariszr/caddy-dns:cloudflare-alpine@sha256:975295205fd1ec17072c3d08a0dfe3d29f6b84e2010a969ba1182b0526c079f9
     container_name: caddy
     restart: always
     configs:
@@ -15,15 +15,11 @@ services:
     environment:
       - ETESYNC_DOMAIN=(ETESYNC_DOMAIN)
     ports:
-      - "10.0.0.143:80:80"
-      - "10.0.0.143:443:443"
-      - "10.0.0.143:443:443/udp"
-      - "[2603:c020:8011:9ede::23]:80:80"
-      - "[2603:c020:8011:9ede::23]:443:443"
-      - "[2603:c020:8011:9ede::23]:443:443/udp"
+      - 80:80
+      - 443:443
       # - "8448:8448"
     volumes:
-      - /home/ubuntu/caddy/configs:/etc/caddy/configs:ro
+      - /home/fzr/caddy/configs:/etc/caddy/configs:ro
       - data:/data
       - config:/config
     networks:
@@ -31,7 +27,7 @@ services:
 
 configs:
   Caddyfile:
-    file: /home/ubuntu/caddy/Caddyfile
+    file: /home/fzr/caddy/Caddyfile
 
 volumes:
   data:
