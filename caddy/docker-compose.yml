@@ -17,6 +17,7 @@ services:
     ports:
       - 80:80
       - 443:443
+      - 443:443/udp
       # - "8448:8448"
     volumes:
       - /home/fzr/caddy/configs:/etc/caddy/configs:ro
