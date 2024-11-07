@@ -50,14 +50,8 @@ jobs:
 
       - name: Add secrets to docker-compose.yml
         env:
-          MATRIX_SYNCV3_POSTGRES: ${{ secrets.matrix_syncv3_postgres }}
-          MATRIX_SYNCV3_SECRET: ${{ secrets.matrix_syncv3_secret }}
-          MATRIX_SYNCV3_POSTGRES_PASSWORD: ${{ secrets.matrix_syncv3_postgres_password }}
           MATRIX_POSTGRES_PASSWORD: ${{ secrets.matrix_postgres_password }}
         run: |
-          sed -i "s|(matrix_syncv3_postgres)|$MATRIX_SYNCV3_POSTGRES|g" $GITHUB_WORKSPACE/matrix/docker-compose.yml
-          sed -i "s|(matrix_syncv3_secret)|$MATRIX_SYNCV3_SECRET|g" $GITHUB_WORKSPACE/matrix/docker-compose.yml
-          sed -i "s|(matrix_syncv3_postgres_password)|$MATRIX_SYNCV3_POSTGRES_PASSWORD|g" $GITHUB_WORKSPACE/matrix/docker-compose.yml
           sed -i "s|(matrix_postgres_password)|$MATRIX_POSTGRES_PASSWORD|g" $GITHUB_WORKSPACE/matrix/docker-compose.yml
 
 
@@ -72,14 +66,7 @@ jobs:
         uses: FarisZR/docker-compose-gitops-action@v1.1
         env:
           POSTGRES_PASSWORD: ${{ secrets.matrix_postgres_password }}
-          MATRIX_TELEGRAM_POSTGRES_PASSWORD: ${{ secrets.matrix_telegram_postgres_password }}
-          MATRIX_DISCORD_POSTGRES_PASSWORD: ${{ secrets.matrix_discord_postgres_password }}
           MATRIX_SIGNING_KEY: ${{ secrets.matrix_signing_key }}
-          MATRIX_HOOKSHOT_GITHUB_PRIVATE_KEY:  ${{ secrets.matrix_hookshot_github_private_key }}
-          MATRIX_HOOKSHOT_PASS_KEY:  ${{ secrets.matrix_hookshot_pass_key }}
-          MATRIX_SLIDING_SYNC_POSTGRES_PASSWORD: ${{ secrets.MATRIX_SLIDING_SYNC_POSTGRES_PASSWORD }}
-          MATRIX_SLIDING_SYNC_POSTGRES_CONNECTION_STRING: ${{ secrets.MATRIX_SLIDING_SYNC_POSTGRES_CONNECTION_STRING }}
-          MATRIX_SLIDING_SYNC_SECRET: ${{ secrets.MATRIX_SLIDING_SYNC_SECRET }}
         with:
           remote_docker_host: ${{ secrets.server_address }}
           ssh_public_key: ${{ secrets.public_ssh_key }}
