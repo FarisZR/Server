@@ -60,10 +60,11 @@ services:
     user: 0:0 # to access caddy certs
     environment:
       - ETURNAL_USER=root
-    ports:
-      - '3478:3478'
-      - '3478:3478/udp'
-      - '49000-49200:49000-49200/udp'
+    network_mode: host
+    # ports:
+    #   - '3478:3478'
+    #   - '3478:3478/udp'
+    #   - '49000-49200:49000-49200/udp'
     volumes:
       - caddy_data:/caddy-data:ro
     configs:

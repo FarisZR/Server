@@ -14,11 +14,19 @@ eturnal:
 
   listen:
     -
-      ip: "::"
+      ip: "0.0.0.0"
       port: 3478
       transport: udp
     -
-      ip: "::"
+      ip: "2a03:4000:f:11f::f"
+      port: 3478
+      transport: udp
+    -
+      ip: "0.0.0.0"
+      port: 3478
+      transport: auto #TLS AND TCP
+    -
+      ip: "2a03:4000:f:11f::f"
       port: 3478
       transport: auto #TLS AND TCP
 
