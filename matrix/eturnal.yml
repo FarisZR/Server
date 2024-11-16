@@ -10,10 +10,6 @@ eturnal:
   ## Shared secret for deriving temporary TURN credentials (default: $RANDOM):
   secret: "(matrix_turn_shared_secret)"
 
-  ## The server's public IPv4 address (default: autodetected):
-  relay_ipv4_addr: "89.168.104.205"
-  ## The server's public IPv6 address (optional):
-  relay_ipv6_addr: "2603:c020:8011:9ede::23"
   realm: turn.fariszr.com
 
   listen:
