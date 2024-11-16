@@ -1,0 +1,29 @@
+name: deploy-radicale
+
+on:
+  push:
+    paths:
+      - '.github/workflows/radicale.yml'
+      - 'radicale/**'
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Start Deployment
+        uses: FarisZR/docker-compose-gitops-action@v1.0.1
+        with:
+          remote_docker_host: ${{ secrets.server_address }}
+          ssh_public_key: ${{ secrets.public_ssh_key }}
+          ssh_private_key: ${{ secrets.private_ssh_key }}
+          compose_file_path: radicale/docker-compose.yml
+          args: -p radicale up -d --remove-orphans
+          upload_directory: true
+          docker_compose_directory: radicale

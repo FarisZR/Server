@@ -1,0 +1,36 @@
+networks:
+  web:
+    external: true
+
+services:
+  radicale:
+    image: tomsquest/docker-radicale:3.3.0.1@sha256:bed1de2c45c67c483d1e41e93c5ce1866cb57c3ba123705c55238ab927e2c298
+    container_name: radicale
+    # ports:
+    #   - 127.0.0.1:5232:5232
+    init: true
+    read_only: true
+    security_opt:
+      - no-new-privileges:true
+    cap_drop:
+      - ALL
+    cap_add:
+      - SETUID
+      - SETGID
+      - CHOWN
+      - KILL
+    deploy:
+      resources:
+        limits:
+          memory: 256M
+          pids: 50
+    healthcheck:
+      test: curl -f http://127.0.0.1:5232 || exit 1
+      interval: 30s
+      retries: 3
+    restart: unless-stopped
+    volumes:
+      - /home/fzr/radicale/data:/data
+      - /home/fzr/radicale/config:/config
+    networks:
+      - web
