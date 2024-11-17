@@ -4,7 +4,7 @@ networks:
 
 services:
   radicale:
-    image: tomsquest/docker-radicale:3.3.0.1@sha256:bed1de2c45c67c483d1e41e93c5ce1866cb57c3ba123705c55238ab927e2c298
+    image: tomsquest/docker-radicale:3.3.0.1@sha256:7ff625d7621744bbfc2d16b8177ed21a9f9cfb94fe2929f5ee99a25ea785257c
     container_name: radicale
     # ports:
     #   - 127.0.0.1:5232:5232
