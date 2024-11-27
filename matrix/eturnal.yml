@@ -18,7 +18,7 @@ eturnal:
       port: 3478
       transport: udp
     -
-      ip: "2a03:4000:f:11f::f"
+      ip: "2a03:4000:4d:118:5421:abff:fe1c:f80b"
       port: 3478
       transport: udp
     -
@@ -26,7 +26,7 @@ eturnal:
       port: 3478
       transport: auto #TLS AND TCP
     -
-      ip: "2a03:4000:f:11f::f"
+      ip: "2a03:4000:4d:118:5421:abff:fe1c:f80b"
       port: 3478
       transport: auto #TLS AND TCP
 
