@@ -26,11 +26,4 @@ matrix.fariszr.com {
 	}	`
 }
 
-{$ETESYNC_DOMAIN} {
-	reverse_proxy etebase:3735
-	encode zstd gzip
-	tls {
-		propagation_timeout 5m
-		resolvers 1.1.1.1 9.9.9.11
-	}
-}
+import /etc/caddy/configs/*.caddyfile
