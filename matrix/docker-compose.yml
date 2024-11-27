@@ -20,7 +20,7 @@ services:
       default:
 
   synapse:
-    image: ghcr.io/element-hq/synapse:v1.120.0@sha256:0d08f310fcbd9e066f7bf60af15cdfc19bd8a84a34ff6fe8bf49c61ea298a60a
+    image: ghcr.io/element-hq/synapse:v1.120.0@sha256:452060951464fa196759433f3f0987fe8acc9a868d9d2d6a9cf1e52a0a446c6c
     container_name: synapse
     environment:
       - UID=991
@@ -54,7 +54,7 @@ services:
       web:
 
   eturnal:
-    image: ghcr.io/processone/eturnal:edge@sha256:e6c36a4bc2730320db42294582188c4a2414f6a8c4f3c8e6f9881ffc2ec0a4e6
+    image: ghcr.io/processone/eturnal:1.12.1-r2@sha256:8043d266f18838cb469a5289ac444a90b7a2aa8b8ab503155b81a2601618a33b
     userns_mode: host
     restart: always
     user: 0:0 # to access caddy certs
