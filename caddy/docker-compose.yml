@@ -15,12 +15,9 @@ services:
     environment:
       - ETESYNC_DOMAIN=(ETESYNC_DOMAIN)
     ports:
-      - 37.120.187.235:80:80
-      - 37.120.187.235:443:443
-      - 37.120.187.235:443:443/udp
-      - "[2a03:4000:f:11f::f]:80:80"
-      - "[2a03:4000:f:11f::f]:443:443"
-      - "[2a03:4000:f:11f::f]:443:443/udp"
+      - 80:80
+      - 443:443
+      - 443:443/udp
       # - "8448:8448"
     volumes:
       - /home/fzr/caddy/configs:/etc/caddy/configs:ro
