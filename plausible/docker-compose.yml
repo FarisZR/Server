@@ -7,7 +7,7 @@ networks:
 services:
   plausible_db:
     restart: unless-stopped
-    image: postgres:14.15-alpine@sha256:f7f3d26e4ad8f49b41d89aa5ae57f84083820522b0ff5caa12a9d616ff4028c9
+    image: postgres:14.15-alpine@sha256:9a437826bdf12bda56c491f27d06c024d05acef98715baa1bf93df263afe850b
     volumes:
       - /home/fzr/plausible/postgresql:/var/lib/postgresql/data:z
     environment:
