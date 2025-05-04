@@ -106,10 +106,10 @@ services:
       # Port 7880 is now only needed internally for Caddy proxying to /livekit/sfu
       # - "7880:7880" # Client API and Webhook callback - No longer exposed directly
       - "7881:7881" # TURN/TLS (LiveKit's own TURN, though disabled in config)
-      - "50000-50200:50000-50200/udp" # UDP port range for media over WebRTC
+      - "50100-50200:50100-50200/udp" # UDP port range for media over WebRTC
     volumes:
       # Mount the new config file
-      - ./livekit-config.yaml:/etc/livekit.yaml:ro
+      - /home/fzr/matrix/livekit-config.yaml:/etc/livekit.yaml:ro
     networks:
       default:
       web: # Needs to be reachable by Caddy

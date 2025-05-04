@@ -5,7 +5,7 @@ bind_addresses:
 
 rtc:
   tcp_port: 7881
-  port_range_start: 50000 # Match docker-compose port range
+  port_range_start: 50100 # Match docker-compose port range
   port_range_end: 50200   # Match docker-compose port range
   use_external_ip: false # Rely on reverse proxy/NAT
 
