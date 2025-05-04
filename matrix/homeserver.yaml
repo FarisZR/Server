@@ -1,3 +1,4 @@
+
 # Configuration file for Synapse.
 #
 # This is a YAML file: see [1] for a quick introduction. Note in particular
@@ -67,6 +68,30 @@ url_preview_ip_range_blacklist:
 turn_uris: [ "turns:turn.fariszr.com?transport=udp", "turns:turn.fariszr.com?transport=tcp", "turn:turn.fariszr.com?transport=udp", "turn:turn.fariszr.com?transport=tcp" ]
 turn_shared_secret: "(matrix_turn_shared_secret)"
 turn_user_lifetime: 1h
+
+# Add experimental features required for Element Call (MatrixRTC)
+experimental_features:
+  # MSC3266: Room summary API. Used for knocking over federation.
+  msc3266_enabled: true
+  # MSC4222: Needed for syncv2 state_after. Allows clients to correctly track room state.
+  msc4222_enabled: true
+  # MSC4140: Delayed events are required for proper call participation signalling.
+  # If disabled, you might get stuck calls in Matrix rooms.
+  msc4140_enabled: true
+  # The maximum allowed duration by which sent events can be delayed, as per MSC4140.
+  max_event_delay_duration: 24h
+
+# Adjust rate limiting for call-related events
+rc_message:
+  # Needs to match at least E2EE key sharing frequency plus headroom.
+  # Key sharing events are bursty.
+  per_second: 0.5
+  burst_count: 30
+
+rc_delayed_event_mgmt:
+  # Needs to match at least the heartbeat frequency (5s = 0.2/s) plus headroom.
+  per_second: 1.0 # Increased from example's 1 to be safer
+  burst_count: 20
 
 email:
   # The hostname of the outgoing SMTP server to use. Defaults to 'localhost'.

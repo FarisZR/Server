@@ -51,8 +51,12 @@ jobs:
       - name: Add secrets to docker-compose.yml
         env:
           MATRIX_POSTGRES_PASSWORD: ${{ secrets.matrix_postgres_password }}
+          LIVEKIT_API_KEY: ${{ secrets.livekit_api_key }}
+          LIVEKIT_API_SECRET: ${{ secrets.livekit_api_secret }}
         run: |
           sed -i "s|(matrix_postgres_password)|$MATRIX_POSTGRES_PASSWORD|g" $GITHUB_WORKSPACE/matrix/docker-compose.yml
+          sed -i "s|(livekit_api_key)|$LIVEKIT_API_KEY|g" $GITHUB_WORKSPACE/matrix/docker-compose.yml
+          sed -i "s|(livekit_api_secret)|$LIVEKIT_API_SECRET|g" $GITHUB_WORKSPACE/matrix/docker-compose.yml
 
 
       - name: Create Secrets

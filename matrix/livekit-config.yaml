@@ -1,0 +1,27 @@
+# Basic LiveKit configuration
+port: 7880 # Port LiveKit listens on internally
+bind_addresses:
+  - "0.0.0.0" # Listen on all interfaces within the container
+
+rtc:
+  tcp_port: 7881
+  port_range_start: 50000 # Match docker-compose port range
+  port_range_end: 50200   # Match docker-compose port range
+  use_external_ip: false # Rely on reverse proxy/NAT
+
+logging:
+  level: info
+
+# Disable LiveKit's internal TURN server since we use eturnal
+turn:
+  enabled: false
+  # domain: matrixrtc.fariszr.com # Not needed if disabled, updated comment for consistency
+  # cert_file: ""
+  # key_file: ""
+  # tls_port: 5349 # Default
+  # udp_port: 443 # Default - Conflicts with Caddy? Better to disable.
+  # external_tls: true # If using external certs, but disabled anyway
+
+# Keys are provided via environment variable LIVEKIT_KEYS in docker-compose.yml
+# keys:
+#   (livekit_api_key): (livekit_api_secret)
