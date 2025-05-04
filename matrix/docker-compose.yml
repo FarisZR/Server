@@ -73,7 +73,7 @@ services:
 
   # Added JWT Authentication Service for Element Call
   lk-jwt-service:
-    image: ghcr.io/element-hq/lk-jwt-service:v0.2.0 # Pinning version
+    image: ghcr.io/element-hq/lk-jwt-service:v0.2.2 # Pinning version
     container_name: element-call-jwt
     restart: unless-stopped
     environment:
@@ -91,7 +91,7 @@ services:
       web: # Needs to be reachable by Caddy
 
   livekit:
-    image: livekit/livekit-server:v2.1.3 # Pinning to a specific version is recommended
+    image: livekit/livekit-server:v1.8.4 # Pinning to a specific version is recommended
     container_name: livekit
     # Use config file instead of just environment variables
     command: --config /etc/livekit.yaml
