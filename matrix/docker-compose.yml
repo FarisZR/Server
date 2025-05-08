@@ -71,6 +71,49 @@ services:
       - source: eturnal
         target: /etc/eturnal.yml
 
+  # Added JWT Authentication Service for Element Call
+  lk-jwt-service:
+    image: ghcr.io/element-hq/lk-jwt-service:v0.2.2 # Pinning version
+    container_name: element-call-jwt
+    restart: unless-stopped
+    environment:
+      # Port the JWT service listens on internally
+      - LK_JWT_PORT=8080
+      # Publicly accessible URL for the LiveKit SFU WebSocket endpoint (updated domain)
+      - LIVEKIT_URL=wss://matrixrtc.fariszr.com/livekit/sfu
+      # API Key and Secret (must match LiveKit service and secrets)
+      - LIVEKIT_KEY=(livekit_api_key)
+      - LIVEKIT_SECRET=(livekit_api_secret)
+      # Optional: Restrict call creation to users from specific homeservers
+      - LIVEKIT_LOCAL_HOMESERVERS=fariszr.com # Hardcoded server name
+    networks:
+      default:
+      web: # Needs to be reachable by Caddy
+
+  livekit:
+    image: livekit/livekit-server:v1.8.4 # Pinning to a specific version is recommended
+    container_name: livekit
+    # Use config file instead of just environment variables
+    command: --config /etc/livekit.yaml
+    restart: unless-stopped
+    # LIVEKIT_KEYS is still needed here for the server itself
+    environment:
+      - LIVEKIT_KEYS=(livekit_api_key):(livekit_api_secret)
+      # Remove other env vars now handled by config.yaml
+      # - LIVEKIT_WS_URL=wss://livekit.fariszr.com
+      # - LIVEKIT_PORT=7880
+    ports:
+      # Port 7880 is now only needed internally for Caddy proxying to /livekit/sfu
+      # - "7880:7880" # Client API and Webhook callback - No longer exposed directly
+      - "7881:7881" # TURN/TLS (LiveKit's own TURN, though disabled in config)
+      - "50100-50200:50100-50200/udp" # UDP port range for media over WebRTC
+    volumes:
+      # Mount the new config file
+      - /home/fzr/matrix/livekit-config.yaml:/etc/livekit.yaml:ro
+    networks:
+      default:
+      web: # Needs to be reachable by Caddy
+
 configs:
   synapse-homeserver:
     file: /home/fzr/matrix/homeserver.yaml
@@ -78,6 +121,7 @@ configs:
     file: /home/fzr/matrix/log.config
   eturnal:
     file: /home/fzr/matrix/eturnal.yml
+
 secrets:
   matrix-signing-key:
     file: /home/fzr/matrix/signing.key #added by the create secrets step
