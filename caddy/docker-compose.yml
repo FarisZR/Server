@@ -19,6 +19,7 @@ services:
       # - "8448:8448"
     volumes:
       - /home/fzr/caddy/configs:/etc/caddy/configs:ro
+      - /home/fzr/caddy/well-known.json:/static/client
       - data:/data
       - config:/config
     networks:

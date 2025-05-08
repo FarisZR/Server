@@ -18,26 +18,13 @@ pa.fariszr.com {
 matrix.fariszr.com {
 	reverse_proxy synapse:8008
 	encode zstd gzip
-	# Updated .well-known to point livekit_service_url to the JWT endpoint on the new domain
-	respond /.well-known/matrix/client 200 {
-		body `{
-			"m.homeserver": {
-				"base_url": "https://matrix.fariszr.com"
-			},
-			"org.matrix.msc4143.rtc_foci": [
-				{
-					"type": "livekit",
-					"livekit_service_url": "https://matrixrtc.fariszr.com/livekit/jwt"
-				}
-			]
-		}`
-		headers {
-			Content-Type application/json
-			Access-Control-Allow-Origin *
-			# Add other CORS headers if needed based on client requirements
-            # Access-Control-Allow-Methods GET, POST, OPTIONS
-            # Access-Control-Allow-Headers Authorization, Content-Type
-		}
+	# Serves the Matrix client .well-known JSON configuration file
+	handle /.well-known/matrix/client {
+		root * /static # Set root for this handler
+		try_files /client =404 # Try to serve /static/client, else 404
+		file_server # Serve the file found by try_files (or handle 404 from try_files)
+		header Content-Type application/json
+		# Ensures correct content type for JSON
 	}
 }
 
@@ -56,15 +43,23 @@ matrixrtc.fariszr.com {
 			# Required for WebSocket proxying
 			header_up Host {http.reverse_proxy.upstream.hostport}
 			header_up X-Forwarded-Host {host}
-            header_up Upgrade {header.Upgrade}
-            header_up Connection {header.Connection}
+			header_up Upgrade {header.Upgrade}
+			header_up Connection {header.Connection}
+		}
+	}
+	# Route SFU WebSocket requests to the livekit container on its internal port 7880
+	handle /sfu/get* {
+		reverse_proxy lk-jwt-service:8080 {
+			header_up Access-Control-Allow-Origin "*"
+			header_up Access-Control-Allow-Methods "POST"
+			header_up Access-Control-Allow-Headers "Accept, Content-Type, Content-Length, Accept-Encoding, X-CSRF-Token"
 		}
 	}
 
-    # Optional: Add a default handler if needed, e.g., redirect or show a message
-    # handle {
-    #    respond "LiveKit backend" 200
-    # }
+	# Optional: Add a default handler if needed, e.g., redirect or show a message
+	# handle {
+	#    respond "LiveKit backend" 200
+	# }
 }
 
 import /etc/caddy/configs/*.caddyfile
