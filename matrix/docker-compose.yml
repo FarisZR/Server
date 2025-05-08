@@ -73,7 +73,7 @@ services:
 
   # Added JWT Authentication Service for Element Call
   lk-jwt-service:
-    image: ghcr.io/element-hq/lk-jwt-service:v0.2.2 # Pinning version
+    image: ghcr.io/element-hq/lk-jwt-service:0.2.3@sha256:a0823807b7d72df7739e31f4d39004d8c87c39d8736b45627c7af6a5d7604054 # Pinning version
     container_name: element-call-jwt
     restart: unless-stopped
     environment:
