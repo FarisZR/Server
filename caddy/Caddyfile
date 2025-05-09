@@ -42,7 +42,6 @@ matrixrtc.fariszr.com {
 		reverse_proxy livekit:7880 {
 			# Required for WebSocket proxying
 			header_up Host {http.reverse_proxy.upstream.hostport}
-			header_up X-Forwarded-Host {host}
 			header_up Upgrade {header.Upgrade}
 			header_up Connection {header.Connection}
 		}
