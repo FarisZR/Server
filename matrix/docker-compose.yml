@@ -74,13 +74,12 @@ services:
   # Added JWT Authentication Service for Element Call
   lk-jwt-service:
     image: ghcr.io/element-hq/lk-jwt-service:latest@sha256:a0823807b7d72df7739e31f4d39004d8c87c39d8736b45627c7af6a5d7604054
-    container_name: element-call-jwt
     restart: unless-stopped
     environment:
       # Port the JWT service listens on internally
       - LK_JWT_PORT=8080
       # Publicly accessible URL for the LiveKit SFU WebSocket endpoint (updated domain)
-      - LIVEKIT_URL=wss://matrixrtc.fariszr.com/livekit/sfu
+      - LIVEKIT_URL=wss://matrixrtc.fariszr.com
       # API Key and Secret (must match LiveKit service and secrets)
       - LIVEKIT_KEY=(livekit_api_key)
       - LIVEKIT_SECRET=(livekit_api_secret)
@@ -98,7 +97,7 @@ services:
     restart: unless-stopped
     # LIVEKIT_KEYS is still needed here for the server itself
     environment:
-      - LIVEKIT_KEYS=(livekit_api_key):(livekit_api_secret)
+      LIVEKIT_KEYS: "(livekit_api_key): (livekit_api_secret)"
       # Remove other env vars now handled by config.yaml
       # - LIVEKIT_WS_URL=wss://livekit.fariszr.com
       # - LIVEKIT_PORT=7880

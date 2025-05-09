@@ -28,37 +28,16 @@ matrix.fariszr.com {
 	}
 }
 
+jwt.matrixrtc.fariszr.com {
+	encode zstd gzip
+	reverse_proxy lk-jwt-service:8080
+}
+
 # Updated LiveKit reverse proxy to use the new domain
 matrixrtc.fariszr.com {
 	encode zstd gzip
-
-	# Route JWT requests to the lk-jwt-service container on its internal port 8080
-	handle /livekit/jwt* {
-		reverse_proxy lk-jwt-service:8080
-	}
-
 	# Route SFU WebSocket requests to the livekit container on its internal port 7880
-	handle /livekit/sfu* {
-		reverse_proxy livekit:7880 {
-			# Required for WebSocket proxying
-			header_up Host {http.reverse_proxy.upstream.hostport}
-			header_up Upgrade {header.Upgrade}
-			header_up Connection {header.Connection}
-		}
-	}
-	# Route SFU WebSocket requests to the livekit container on its internal port 7880
-	handle /sfu/get* {
-		reverse_proxy lk-jwt-service:8080 {
-			header_up Access-Control-Allow-Origin "*"
-			header_up Access-Control-Allow-Methods "POST"
-			header_up Access-Control-Allow-Headers "Accept, Content-Type, Content-Length, Accept-Encoding, X-CSRF-Token"
-		}
-	}
-
-	# Optional: Add a default handler if needed, e.g., redirect or show a message
-	# handle {
-	#    respond "LiveKit backend" 200
-	# }
+	reverse_proxy livekit:7880
 }
 
 import /etc/caddy/configs/*.caddyfile
