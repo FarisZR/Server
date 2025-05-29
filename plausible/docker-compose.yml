@@ -15,7 +15,7 @@ services:
 
   plausible_events_db:
     restart: unless-stopped
-    image: clickhouse/clickhouse-server:24.3.3.102-alpine
+    image: clickhouse/clickhouse-server:24.12-alpine
     volumes:
       - /home/fzr/plausible/event-data:/var/lib/clickhouse:z
     configs:
@@ -23,6 +23,8 @@ services:
         target: /etc/clickhouse-server/config.d/logging.xml
       - source: clickhouse-user-config
         target: /etc/clickhouse-server/users.d/logging.xml
+    environment:
+      - CLICKHOUSE_SKIP_USER_SETUP=1
     ulimits:
       nofile:
         soft: 262144
