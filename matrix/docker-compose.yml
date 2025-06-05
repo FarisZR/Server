@@ -90,7 +90,7 @@ services:
       web: # Needs to be reachable by Caddy
 
   livekit:
-    image: livekit/livekit-server:v1.8.4@sha256:621fd87bd64a0c83e1f2418ee0323eb920d00acdd73e5f79b303c64f6cc532af # Pinning to a specific version is recommended
+    image: livekit/livekit-server:v1.9.0@sha256:3602a85840d51981808d0519aefca170a3dbe3dec7bc8c5b87cbd52a503ea89f # Pinning to a specific version is recommended
     container_name: livekit
     # Use config file instead of just environment variables
     command: --config /etc/livekit.yaml
