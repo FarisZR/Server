@@ -4,7 +4,7 @@ networks:
 
 services:
   caddy:
-    image: caddy:alpine@sha256:64642fe1e2319c999d20aa489a73e261b5b4ae4fab29385b61e5221287af5c42
+    image: caddy:alpine@sha256:a4180db0805b3725ddf936d2e6290553745c7339c003565da717ee612fd8a888
     container_name: caddy
     command: caddy run --watch --config /etc/caddy/Caddyfile --adapter caddyfile
     restart: always
