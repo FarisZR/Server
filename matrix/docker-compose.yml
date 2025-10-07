@@ -20,7 +20,7 @@ services:
       default:
 
   synapse:
-    image: ghcr.io/element-hq/synapse:v1.139.0@sha256:76ffaa19418923ab7b70fa0947c1ae16c07b45a65f596c1ff0424ce5eac8b185
+    image: ghcr.io/element-hq/synapse:v1.139.2@sha256:89b1f98ae38bea1d8a7d73295752b083b2ebbdaa8f226697e4637e03f9d0c745
     container_name: synapse
     environment:
       - UID=991
