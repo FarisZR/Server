@@ -73,7 +73,7 @@ services:
 
   # Added JWT Authentication Service for Element Call
   lk-jwt-service:
-    image: ghcr.io/element-hq/lk-jwt-service:latest@sha256:52357326970d3f3e3cf6e9c33766e49cf2665e2cd57842e29a5c298514bd2e58
+    image: ghcr.io/element-hq/lk-jwt-service:latest@sha256:aba31cef052cedbf263f5e642dfb49476f779b46d0244d5b9337022033c4b66d
     restart: unless-stopped
     environment:
       # Port the JWT service listens on internally
